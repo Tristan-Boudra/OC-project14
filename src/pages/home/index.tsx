@@ -1,11 +1,11 @@
 import { Select } from "hrnet_plugin_boudra_tristan";
 
 /**
- * Renders the EmployeeList component.
+ * Renders the Home component.
  *
- * @return {JSX.Element} The rendered EmployeeList component.
+ * @return {JSX.Element} The rendered Home component.
  */
-export default function EmployeeList(): JSX.Element {
+export default function Home(): JSX.Element {
   const states = [
     {
         "name": "Alabama",

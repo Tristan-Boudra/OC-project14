@@ -1,11 +1,11 @@
 /**
- * Function that renders the EmployeeList component.
+ * Function that renders the Footer component.
  *
- * @return {JSX.Element} The JSX element representing the EmployeeList component
+ * @return {JSX.Element} The JSX element representing the Footer component
  */
-export default function EmployeeList(): JSX.Element {
+export default function Footer(): JSX.Element {
   return (
-    <div className="text-center">
+    <div className="flex flex-row justify-center w-full px-5 py-2 border rounded-b-none rounded-tr-lg rounded-tl-lg shadow-md">
       <p>2024 - HRNet</p>
     </div>
   )
