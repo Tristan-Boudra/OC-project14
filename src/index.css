@@ -15,3 +15,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.formSelect {
+  border: 1px solid #e5e7eb;
+  padding-left: 0.75rem;
+  border-radius: 0.5rem;
+  height: 27px;
+  color: #9ca3af;
+}
+
+/* Component calendar */

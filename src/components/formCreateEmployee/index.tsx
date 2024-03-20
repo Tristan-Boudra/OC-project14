@@ -1,6 +1,10 @@
 import { Select } from "hrnet_plugin_boudra_tristan";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import Modal from "../modal";
+import { useDispatch } from "react-redux";
+import { setAddEmployee } from "../../slices/createEmployeeSlice";
+import { Calendar } from 'primereact/calendar';
+import { Nullable } from "primereact/ts-helpers";
 
 export default function FormCreateEmployee() {
   const states = [
@@ -242,47 +246,12 @@ export default function FormCreateEmployee() {
     }
 ];
 
-  // Déclaration des états locaux pour stocker les dates de naissance et de début
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [dateOfBirth, setDateOfBirth] = useState<string>("");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [startDate, setStartDate] = useState<string>("");
-  const [dateOfBirthError, setDateOfBirthError] = useState<string>("");
-  const [startDateError, setStartDateError] = useState<string>("");
   const [modalOpen, setModalOpen] = useState(false);
-
-  /**
-   * A function to validate if a given date string corresponds to a person who is 18 years or older.
-   *
-   * @param {string} dateString - the date string to be validated
-   * @return {boolean} true if the person is 18 years or older, false otherwise
-   */
-  const validateAge = (dateString: string): boolean => {
-    const today = new Date();
-    const birthDate = new Date(dateString);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age >= 18;
-  };
-
-  /**
-   * A function that handles the change of the date of birth input field.
-   *
-   * @param {ChangeEvent<HTMLInputElement>} e - the event triggered by the input change
-   * @return {void} 
-   */
-  const handleDateOfBirthChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const dob = e.target.value;
-    setDateOfBirth(dob);
-    if (!validateAge(dob)) {
-      setDateOfBirthError("You must be at least 18 years old.");
-    } else {
-      setDateOfBirthError("");
-    }
-  };
+  const dispatch = useDispatch();
+  const [selectedState, setSelectedState] = useState<string>("");
+  const [selectedDepartment, setDepartmentState] = useState<string>("");
+  const [dateBirth, setDateBirth] = useState<Nullable<Date>>(null);
+  const [startDate, setStartDate] = useState<Nullable<Date>>(null);
 
   /**
    * A function that handles the change event for the start date input field.
@@ -290,23 +259,55 @@ export default function FormCreateEmployee() {
    * @param {ChangeEvent<HTMLInputElement>} e - the event object containing the input element
    * @return {void} 
    */
-  const handleStartDateChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const start = e.target.value;
-    setStartDate(start);
-    if (!validateAge(start)) {
-      setStartDateError("You must be at least 18 years old to start.");
-    } else {
-      setStartDateError("");
-    }
-  };
-
   const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const firstName = (document.getElementById("firstName") as HTMLInputElement).value;
+    const lastName = (document.getElementById("lastName") as HTMLInputElement).value;
+    const dateOfBirth = dateBirth ? dateBirth.toISOString() : "";
+    const startDateValue = startDate ? startDate.toISOString() : "";
+    const street = (document.getElementById("street") as HTMLInputElement).value;
+    const city = (document.getElementById("city") as HTMLInputElement).value;
+    const zipCode = (document.getElementById("zipCode") as HTMLInputElement).value;
+  
+    const employeeData = {
+        firstName,
+        lastName,
+        dateOfBirth,
+        startDate: startDateValue,
+        department: selectedDepartment,
+        street,
+        city,
+        state: selectedState,
+        zipCode,
+    };
+    dispatch(setAddEmployee(employeeData));
     setModalOpen(true);
   };
 
+    /**
+   * Closes the modal by setting modalOpen to false.
+   */
   const closeModal = () => {
     setModalOpen(false);
+  };
+
+    /**
+   * Handles the state change when a selection is made.
+   *
+   * @param {any} selectedOption - The selected option.
+   */
+  const handleStateChange = (selectedOption: any) => {
+    setSelectedState(selectedOption.name);
+  };
+
+    /**
+   * A function to handle department change.
+   *
+   * @param {any} selectedOption - the selected option
+   * @return {void} 
+   */
+  const handleDepartmentChange = (selectedOption: any) => {
+    setDepartmentState(selectedOption.name);
   };
 
   return (
@@ -321,8 +322,9 @@ export default function FormCreateEmployee() {
               </div>
               <div className="flex flex-col">
                 <label className="text-left">Date of Birth</label>
-                <input type="date" className="border rounded-lg pl-3" placeholder="Date of Birth" id="dateOfBirth" onChange={handleDateOfBirthChange} />
-                {dateOfBirthError && <span className="text-red-500">{dateOfBirthError}</span>}
+                <div className="card flex justify-content-center">
+                    <Calendar value={dateBirth} onChange={(e) => setDateBirth(e.value)} className="w-full border rounded-lg pl-3" placeholder="Date of Birth" />
+                </div>
               </div>
               <div className="flex flex-col">
                 <label className="text-left">Street</label>
@@ -330,11 +332,11 @@ export default function FormCreateEmployee() {
               </div>
               <div className="flex flex-col">
                 <label className="text-left">State</label>
-                <Select options={states} defaultOptionText="Select State" />
+                <Select options={states} defaultOptionText="Select State" onChange={handleStateChange} />
               </div>
               <div className="flex flex-col">
                 <label className="text-left">Department</label>
-                <Select options={states} defaultOptionText="Select State" />
+                <Select options={states} defaultOptionText="Select Department" onChange={handleDepartmentChange} />
               </div>
             </div>
             <div className="flex flex-col gap-5 mt-5 md:mt-0">
@@ -344,8 +346,7 @@ export default function FormCreateEmployee() {
               </div>
               <div className="flex flex-col">
                 <label className="text-left">Start Date</label>
-                <input type="date" className="border rounded-lg pl-3" placeholder="Start Date" id="startDate" onChange={handleStartDateChange} />
-                {startDateError && <span className="text-red-500">{startDateError}</span>}
+                <Calendar value={startDate} onChange={(e) => setStartDate(e.value)} className="w-full border rounded-lg pl-3" placeholder="Start Date" />
               </div>
               <div className="flex flex-col">
                 <label className="text-left">City</label>
