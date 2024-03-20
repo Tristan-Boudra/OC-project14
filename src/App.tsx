@@ -1,8 +1,8 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/home';
-import Layout from './components/layout';
-import Error from './pages/error';
-import EmployeeList from './pages/employeeList';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./pages/home";
+import Layout from "./components/layout";
+import Error from "./pages/error";
+import EmployeeList from "./pages/employeeList";
 
 /**
  * Renders the main application component.

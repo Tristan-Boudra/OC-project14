@@ -5,8 +5,10 @@
  */
 export default function Error(): JSX.Element {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <h1>Error</h1>
+    <div className="flex justify-center items-center text-center mt-5 flex-grow">
+      <section className="flex-grow">
+        <h1>Error</h1>
+      </section>
     </div>
-  )
+  );
 }

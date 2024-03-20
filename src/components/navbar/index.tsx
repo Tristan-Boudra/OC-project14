@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 /**
  * Renders the Navbar component.
@@ -18,12 +18,22 @@ export default function Navbar(): JSX.Element {
   return (
     <div className="md:flex md:flex-row md:justify-between md:w-full px-5 py-2 border rounded-t-none rounded-br-lg rounded-bl-lg shadow-md">
       <div className="flex items-center justify-between">
-        <h1><Link to="/">HRNet</Link></h1>
+        <h1>
+          <Link to="/">HRNet</Link>
+        </h1>
         <div className="md:hidden">
           {!menuOpen ? (
-            <FontAwesomeIcon icon={faBars} className="text-gray-600 text-xl cursor-pointer" onClick={toggleMenu} />
+            <FontAwesomeIcon
+              icon={faBars}
+              className="text-gray-600 text-xl cursor-pointer"
+              onClick={toggleMenu}
+            />
           ) : (
-            <FontAwesomeIcon icon={faTimes} className="text-gray-600 text-xl cursor-pointer" onClick={toggleMenu} />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className="text-gray-600 text-xl cursor-pointer"
+              onClick={toggleMenu}
+            />
           )}
         </div>
       </div>
@@ -31,10 +41,14 @@ export default function Navbar(): JSX.Element {
         <nav className="md:hidden">
           <ul className="flex flex-col items-center my-8">
             <li className="hover:text-primary mb-3">
-              <Link to="/" onClick={toggleMenu}>Home</Link>
+              <Link to="/" onClick={toggleMenu}>
+                Home
+              </Link>
             </li>
             <li className="hover:text-primary">
-              <Link to="/employee-list" onClick={toggleMenu}>Employee List</Link>
+              <Link to="/employee-list" onClick={toggleMenu}>
+                Employee List
+              </Link>
             </li>
           </ul>
         </nav>

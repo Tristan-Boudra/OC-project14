@@ -8,5 +8,5 @@ export default function Footer(): JSX.Element {
     <div className="flex flex-row justify-center w-full px-5 py-2 border rounded-b-none rounded-tr-lg rounded-tl-lg shadow-md flex-shrink-0">
       <p>2024 - HRNet</p>
     </div>
-  )
+  );
 }

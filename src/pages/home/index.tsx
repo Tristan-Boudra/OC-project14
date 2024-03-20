@@ -8,7 +8,6 @@ import FormCreateEmployee from "../../components/formCreateEmployee";
 export default function Home(): JSX.Element {
   return (
     <div className="text-center mt-5 flex-grow">
-      <h1>Page Home</h1>
       <section className="flex-grow">
         <FormCreateEmployee />
       </section>
