@@ -361,6 +361,62 @@ export default function FormCreateEmployee() {
     setSelectedDepartment(selectedOption.name);
   };
 
+  /**
+   * A function to check if the selected date is at least 18 years ago.
+   *
+   * @param {Date} selectedDate - The selected date.
+   * @return {boolean} - Whether the selected date is at least 18 years ago.
+   */
+  const isOver18Years = (selectedDate: Date) => {
+    const today = new Date();
+    const minAgeDate = new Date(
+      today.getFullYear() - 18,
+      today.getMonth(),
+      today.getDate(),
+    );
+    return selectedDate <= minAgeDate;
+  };
+
+  /**
+   * A function to handle the change event for the date of birth input field.
+   *
+   * @param {Date | undefined} value - The selected date.
+   */
+  const handleDateOfBirthChange = (value: any) => {
+    if (!value) {
+      setDateBirth(null);
+      return;
+    }
+
+    const selectedDate = new Date(value);
+    if (!isOver18Years(selectedDate)) {
+      setDialogHeader("Error");
+      setDialogContent("You must be at least 18 years old !");
+      setVisible(true);
+      setDateBirth(null);
+    } else {
+      setDateBirth(selectedDate);
+    }
+  };
+
+  const handleStartDateChange = (value: any) => {
+    if (!value) {
+      setStartDate(null);
+      return;
+    }
+
+    const selectedDate = new Date(value);
+    const today = new Date();
+    if (selectedDate > today) {
+      setDialogHeader("Error");
+      setDialogContent("Start date cannot be in the future !");
+      setVisible(true);
+      setStartDate(null);
+    } else {
+      setStartDate(selectedDate);
+    }
+  };
+
   return (
     <>
       <form className="md:flex md:flex-col border p-5 rounded-lg mt-5">
@@ -381,7 +437,7 @@ export default function FormCreateEmployee() {
               <div className="card flex justify-content-center">
                 <Calendar
                   value={dateBirth}
-                  onChange={(e) => setDateBirth(e.value)}
+                  onChange={(e) => handleDateOfBirthChange(e.value)}
                   className="w-full border rounded-lg pl-3"
                   placeholder="Date of Birth"
                 />
@@ -427,7 +483,7 @@ export default function FormCreateEmployee() {
               <label className="text-left">Start Date</label>
               <Calendar
                 value={startDate}
-                onChange={(e) => setStartDate(e.value)}
+                onChange={(e) => handleStartDateChange(e.value)}
                 className="w-full border rounded-lg pl-3"
                 placeholder="Start Date"
               />
