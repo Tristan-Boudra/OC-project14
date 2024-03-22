@@ -24,4 +24,10 @@ code {
   color: #9ca3af;
 }
 
-/* Component calendar */
+#selectState:hover {
+  border-color: #6366f1;
+}
+
+#selectDepartment:hover {
+  border-color: #6366f1;
+}

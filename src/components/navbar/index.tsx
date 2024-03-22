@@ -19,7 +19,9 @@ export default function Navbar(): JSX.Element {
     <div className="md:flex md:flex-row md:justify-between md:w-full px-5 py-2 border rounded-t-none rounded-br-lg rounded-bl-lg shadow-md">
       <div className="flex items-center justify-between">
         <h1>
-          <Link to="/">HRNet</Link>
+          <Link className="hover:text-primary" to="/">
+            HRNet
+          </Link>
         </h1>
         <div className="md:hidden">
           {!menuOpen ? (

@@ -1,271 +1,45 @@
 import { Select } from "hrnet_plugin_boudra_tristan";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { setAddEmployee } from "../../slices/createEmployeeSlice";
 import { Calendar } from "primereact/calendar";
 import { Nullable } from "primereact/ts-helpers";
 import { Dialog } from "primereact/dialog";
+import { states } from "../../data/states";
+import { department } from "../../data/department";
 
 export default function FormCreateEmployee() {
-  const states = [
-    {
-      name: "Alabama",
-      abbreviation: "AL",
-    },
-    {
-      name: "Alaska",
-      abbreviation: "AK",
-    },
-    {
-      name: "American Samoa",
-      abbreviation: "AS",
-    },
-    {
-      name: "Arizona",
-      abbreviation: "AZ",
-    },
-    {
-      name: "Arkansas",
-      abbreviation: "AR",
-    },
-    {
-      name: "California",
-      abbreviation: "CA",
-    },
-    {
-      name: "Colorado",
-      abbreviation: "CO",
-    },
-    {
-      name: "Connecticut",
-      abbreviation: "CT",
-    },
-    {
-      name: "Delaware",
-      abbreviation: "DE",
-    },
-    {
-      name: "District Of Columbia",
-      abbreviation: "DC",
-    },
-    {
-      name: "Federated States Of Micronesia",
-      abbreviation: "FM",
-    },
-    {
-      name: "Florida",
-      abbreviation: "FL",
-    },
-    {
-      name: "Georgia",
-      abbreviation: "GA",
-    },
-    {
-      name: "Guam",
-      abbreviation: "GU",
-    },
-    {
-      name: "Hawaii",
-      abbreviation: "HI",
-    },
-    {
-      name: "Idaho",
-      abbreviation: "ID",
-    },
-    {
-      name: "Illinois",
-      abbreviation: "IL",
-    },
-    {
-      name: "Indiana",
-      abbreviation: "IN",
-    },
-    {
-      name: "Iowa",
-      abbreviation: "IA",
-    },
-    {
-      name: "Kansas",
-      abbreviation: "KS",
-    },
-    {
-      name: "Kentucky",
-      abbreviation: "KY",
-    },
-    {
-      name: "Louisiana",
-      abbreviation: "LA",
-    },
-    {
-      name: "Maine",
-      abbreviation: "ME",
-    },
-    {
-      name: "Marshall Islands",
-      abbreviation: "MH",
-    },
-    {
-      name: "Maryland",
-      abbreviation: "MD",
-    },
-    {
-      name: "Massachusetts",
-      abbreviation: "MA",
-    },
-    {
-      name: "Michigan",
-      abbreviation: "MI",
-    },
-    {
-      name: "Minnesota",
-      abbreviation: "MN",
-    },
-    {
-      name: "Mississippi",
-      abbreviation: "MS",
-    },
-    {
-      name: "Missouri",
-      abbreviation: "MO",
-    },
-    {
-      name: "Montana",
-      abbreviation: "MT",
-    },
-    {
-      name: "Nebraska",
-      abbreviation: "NE",
-    },
-    {
-      name: "Nevada",
-      abbreviation: "NV",
-    },
-    {
-      name: "New Hampshire",
-      abbreviation: "NH",
-    },
-    {
-      name: "New Jersey",
-      abbreviation: "NJ",
-    },
-    {
-      name: "New Mexico",
-      abbreviation: "NM",
-    },
-    {
-      name: "New York",
-      abbreviation: "NY",
-    },
-    {
-      name: "North Carolina",
-      abbreviation: "NC",
-    },
-    {
-      name: "North Dakota",
-      abbreviation: "ND",
-    },
-    {
-      name: "Northern Mariana Islands",
-      abbreviation: "MP",
-    },
-    {
-      name: "Ohio",
-      abbreviation: "OH",
-    },
-    {
-      name: "Oklahoma",
-      abbreviation: "OK",
-    },
-    {
-      name: "Oregon",
-      abbreviation: "OR",
-    },
-    {
-      name: "Palau",
-      abbreviation: "PW",
-    },
-    {
-      name: "Pennsylvania",
-      abbreviation: "PA",
-    },
-    {
-      name: "Puerto Rico",
-      abbreviation: "PR",
-    },
-    {
-      name: "Rhode Island",
-      abbreviation: "RI",
-    },
-    {
-      name: "South Carolina",
-      abbreviation: "SC",
-    },
-    {
-      name: "South Dakota",
-      abbreviation: "SD",
-    },
-    {
-      name: "Tennessee",
-      abbreviation: "TN",
-    },
-    {
-      name: "Texas",
-      abbreviation: "TX",
-    },
-    {
-      name: "Utah",
-      abbreviation: "UT",
-    },
-    {
-      name: "Vermont",
-      abbreviation: "VT",
-    },
-    {
-      name: "Virgin Islands",
-      abbreviation: "VI",
-    },
-    {
-      name: "Virginia",
-      abbreviation: "VA",
-    },
-    {
-      name: "Washington",
-      abbreviation: "WA",
-    },
-    {
-      name: "West Virginia",
-      abbreviation: "WV",
-    },
-    {
-      name: "Wisconsin",
-      abbreviation: "WI",
-    },
-    {
-      name: "Wyoming",
-      abbreviation: "WY",
-    },
-  ];
-
-  const department = [
-    {
-      name: "Engineering",
-      abbreviation: "Engineering",
-    },
-    {
-      name: "Finance",
-      abbreviation: "Finance",
-    },
-  ];
+  interface Option {
+    name: string;
+    abbreviation: string;
+  }
 
   const dispatch = useDispatch();
-  const [selectedState, setSelectedState] = useState<string>("");
-  const [selectedDepartment, setSelectedDepartment] = useState<string>("");
+  const [selectedState, setSelectedState] = useState<Option | null>(null);
+  const [selectedDepartment, setSelectedDepartment] = useState<Option | null>(
+    null,
+  );
+  const [selectedStateOption, setSelectedStateOption] = useState<Option | null>(
+    null,
+  );
+  const [selectedDepartmentOption, setSelectedDepartmentOption] =
+    useState<Option | null>(null);
   const [dateBirth, setDateBirth] = useState<Nullable<Date>>(null);
   const [startDate, setStartDate] = useState<Nullable<Date>>(null);
   const [visible, setVisible] = useState(false);
   const [dialogHeader, setDialogHeader] = useState("");
   const [dialogContent, setDialogContent] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [userSaved, setUserSaved] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [stateValue, setStateValue] = useState<string>("");
+  const employees = useSelector((state: any) => state.createEmployee.employees);
+
+  useEffect(() => {
+    setStartDate(null);
+    setDateBirth(null);
+  }, [userSaved]);
 
   /**
    * A function that handles the change event for the start date input field.
@@ -273,15 +47,26 @@ export default function FormCreateEmployee() {
    * @param {ChangeEvent<HTMLInputElement>} e - the event object containing the input element
    * @return {void}
    */
-  const handleSave = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    if (userSaved) {
-      setDialogHeader("Error");
-      setDialogContent("User is already saved.");
-      setVisible(true);
-      return;
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    const regex = /^[a-zA-ZÀ-ÿ\s',\d-]*$/;
+    const isValid = regex.test(value);
+    if (!isValid) {
+      showModalError("Error", "Invalid input !");
+      e.target.value = "";
+    } else {
+      setStateValue(value);
     }
+  };
+
+  /**
+   * Handle the save action for the form, performs validation and dispatches the employee data if valid.
+   *
+   * @param {React.FormEvent} e - the form event triggering the save action
+   * @return {void}
+   */
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
 
     const firstNameInput = document.getElementById(
       "firstName",
@@ -299,6 +84,8 @@ export default function FormCreateEmployee() {
       "zipCode",
     ) as HTMLInputElement | null;
 
+    const form = formRef?.current;
+
     if (
       !dateBirth ||
       !startDate ||
@@ -308,38 +95,70 @@ export default function FormCreateEmployee() {
       !lastNameInput?.value ||
       !streetInput?.value ||
       !cityInput?.value ||
-      !zipCodeInput?.value
+      !zipCodeInput?.value ||
+      !form?.checkValidity()
     ) {
-      setDialogHeader("Error");
-      setDialogContent("Please fill in all the required fields");
-      setVisible(true);
+      showModalError("Error", "Please fill in all the required fields");
     } else {
-      const firstName = firstNameInput?.value;
-      const lastName = lastNameInput?.value;
-      const dateOfBirth = dateBirth?.toISOString();
-      const startDateValue = startDate?.toISOString();
-      const street = streetInput?.value;
-      const city = cityInput?.value;
-      const zipCode = zipCodeInput?.value;
+      const firstName = firstNameInput.value;
+      const lastName = lastNameInput.value;
+      const dateOfBirth = dateBirth.toISOString();
+      const startDateValue = startDate.toISOString();
+      const street = streetInput.value;
+      const city = cityInput.value;
+      const zipCode = zipCodeInput.value;
 
-      const employeeData = {
-        firstName,
-        lastName,
-        dateOfBirth,
-        startDate: startDateValue,
-        department: selectedDepartment,
-        street,
-        city,
-        state: selectedState,
-        zipCode,
-      };
+      // Vérifier si l'employé existe déjà
+      const employeeExists = employees.some((employee: any) => {
+        return (
+          employee.firstName === firstName &&
+          employee.lastName === lastName &&
+          employee.dateOfBirth === dateOfBirth &&
+          employee.startDate === startDateValue &&
+          employee.street === street &&
+          employee.city === city &&
+          employee.state === selectedState &&
+          employee.zipCode === zipCode
+        );
+      });
 
-      dispatch(setAddEmployee(employeeData));
-      setUserSaved(true);
-      setDialogHeader("Confirmation");
-      setDialogContent("Employee created successfully !");
-      setVisible(true);
+      if (employeeExists) {
+        showModalError("Error", "Employee already exists !");
+        firstNameInput.value = "";
+        lastNameInput.value = "";
+        streetInput.value = "";
+        cityInput.value = "";
+        zipCodeInput.value = "";
+        setUserSaved(false);
+      } else {
+        const employeeData = {
+          firstName,
+          lastName,
+          dateOfBirth,
+          startDate: startDateValue,
+          department: selectedDepartment.name,
+          street,
+          city,
+          state: selectedState.name,
+          zipCode,
+        };
+
+        dispatch(setAddEmployee(employeeData));
+        setUserSaved(true);
+        setDateBirth(null);
+        setStartDate(null);
+        setSelectedDepartmentOption(null);
+        setSelectedStateOption(null);
+        showModalError("Success", "Employee created successfully !");
+        form.reset();
+      }
     }
+  };
+
+  const showModalError = (header: string, content: string) => {
+    setDialogHeader(header);
+    setDialogContent(content);
+    setVisible(true);
   };
 
   /**
@@ -347,8 +166,13 @@ export default function FormCreateEmployee() {
    *
    * @param {any} selectedOption - The selected option.
    */
-  const handleStateChange = (selectedOption: any) => {
-    setSelectedState(selectedOption.name);
+  const handleStateChange = (selectedOption: Option | null) => {
+    setSelectedStateOption(selectedOption);
+    if (selectedOption && selectedOption.name) {
+      setSelectedState(selectedOption);
+    } else {
+      setSelectedState(null);
+    }
   };
 
   /**
@@ -357,8 +181,13 @@ export default function FormCreateEmployee() {
    * @param {any} selectedOption - the selected option
    * @return {void}
    */
-  const handleDepartmentChange = (selectedOption: any) => {
-    setSelectedDepartment(selectedOption.name);
+  const handleDepartmentChange = (selectedOption: Option | null) => {
+    setSelectedDepartmentOption(selectedOption);
+    if (selectedOption && selectedOption.name) {
+      setSelectedDepartment(selectedOption);
+    } else {
+      setSelectedDepartment(null);
+    }
   };
 
   /**
@@ -390,15 +219,19 @@ export default function FormCreateEmployee() {
 
     const selectedDate = new Date(value);
     if (!isOver18Years(selectedDate)) {
-      setDialogHeader("Error");
-      setDialogContent("You must be at least 18 years old !");
-      setVisible(true);
+      showModalError("Error", "You must be at least 18 years old !");
       setDateBirth(null);
     } else {
       setDateBirth(selectedDate);
     }
   };
 
+  /**
+   * Handles the change event of the start date input.
+   *
+   * @param {any} value - The new value of the start date.
+   * @return {void} This function does not return anything.
+   */
   const handleStartDateChange = (value: any) => {
     if (!value) {
       setStartDate(null);
@@ -408,9 +241,7 @@ export default function FormCreateEmployee() {
     const selectedDate = new Date(value);
     const today = new Date();
     if (selectedDate > today) {
-      setDialogHeader("Error");
-      setDialogContent("Start date cannot be in the future !");
-      setVisible(true);
+      showModalError("Error", "Start date cannot be in the future !");
       setStartDate(null);
     } else {
       setStartDate(selectedDate);
@@ -419,100 +250,120 @@ export default function FormCreateEmployee() {
 
   return (
     <>
-      <form className="md:flex md:flex-col border p-5 rounded-lg mt-5">
-        <h1>Form Create Employee</h1>
+      <form
+        ref={formRef}
+        onSubmit={handleSave}
+        className="md:flex md:flex-col border p-5 rounded-lg mt-5"
+      >
+        <h1 className="text-primary text-2xl">Form Create Employee</h1>
         <div className="md:flex md:flex-row md:justify-around md:w-full md:mt-10">
           <div className="flex flex-col gap-5">
             <div className="flex flex-col">
-              <label className="text-left">First Name</label>
+              <label className="text-left text-primary ">First Name</label>
               <input
                 type="text"
-                className="border rounded-lg pl-3"
+                className="border rounded-lg pl-3 hover:border-primary"
                 placeholder="First Name"
                 id="firstName"
+                onChange={handleInputChange}
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-left">Date of Birth</label>
+              <label className="text-left text-primary">Date of Birth</label>
               <div className="card flex justify-content-center">
                 <Calendar
+                  id="dateOfBirth"
                   value={dateBirth}
                   onChange={(e) => handleDateOfBirthChange(e.value)}
-                  className="w-full border rounded-lg pl-3"
+                  className="w-full border rounded-lg pl-3 hover:border-primary"
                   placeholder="Date of Birth"
+                  showIcon
                 />
               </div>
             </div>
             <div className="flex flex-col">
-              <label className="text-left">Street</label>
+              <label className="text-left text-primary">Street</label>
               <input
                 type="text"
-                className="border rounded-lg pl-3"
+                className="border rounded-lg pl-3 hover:border-primary"
                 placeholder="Street"
                 id="street"
+                onChange={handleInputChange}
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-left">State</label>
+              <label className="text-left text-primary">State</label>
               <Select
+                id="selectState"
                 options={states}
                 defaultOptionText="Select State"
+                value={
+                  selectedStateOption ? selectedStateOption.abbreviation : ""
+                }
                 onChange={handleStateChange}
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-left">Department</label>
+              <label className="text-left text-primary">Department</label>
               <Select
+                id="selectDepartment"
                 options={department}
                 defaultOptionText="Select Department"
+                value={
+                  selectedDepartmentOption
+                    ? selectedDepartmentOption.abbreviation
+                    : ""
+                }
                 onChange={handleDepartmentChange}
               />
             </div>
           </div>
           <div className="flex flex-col gap-5 mt-5 md:mt-0">
             <div className="flex flex-col">
-              <label className="text-left">Last Name</label>
+              <label className="text-left text-primary">Last Name</label>
               <input
                 type="text"
-                className="border rounded-lg pl-3"
+                className="border rounded-lg pl-3 hover:border-primary"
                 placeholder="Last Name"
                 id="lastName"
+                onChange={handleInputChange}
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-left">Start Date</label>
+              <label className="text-left text-primary">Start Date</label>
               <Calendar
+                id="startDate"
                 value={startDate}
                 onChange={(e) => handleStartDateChange(e.value)}
-                className="w-full border rounded-lg pl-3"
+                className="w-full border rounded-lg pl-3 hover:border-primary"
                 placeholder="Start Date"
+                showIcon
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-left">City</label>
+              <label className="text-left text-primary">City</label>
               <input
                 type="text"
-                className="border rounded-lg pl-3"
+                className="border rounded-lg pl-3 hover:border-primary"
                 placeholder="City"
                 id="city"
+                onChange={handleInputChange}
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-left">Zip Code</label>
+              <label className="text-left text-primary">Zip Code</label>
               <input
                 type="text"
-                className="border rounded-lg pl-3"
+                className="border rounded-lg pl-3 hover:border-primary"
                 placeholder="Zip Code"
                 id="zipCode"
+                onChange={handleInputChange}
               />
             </div>
           </div>
         </div>
         <div className="mt-5">
-          <button
-            className="text-white bg-primary rounded-lg px-8 py-2 w-full md:w-max"
-            onClick={handleSave}
-          >
+          <button className="text-white bg-primary rounded-lg px-8 py-2 w-full md:w-max">
             Save
           </button>
         </div>
