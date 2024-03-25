@@ -31,3 +31,15 @@ code {
 #selectDepartment:hover {
   border-color: #6366f1;
 }
+
+.p-dialog-title {
+  color: #6366f1;
+}
+
+.p-sortable-column:hover {
+  color: #6366f1;
+}
+
+.p-datatable .p-datatable-thead > tr > th:hover {
+  background-color: #6365f12c;
+}

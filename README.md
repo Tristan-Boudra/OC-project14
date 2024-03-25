@@ -30,6 +30,8 @@ npm run start
 
 Your application should now be running at http://locahost:3000 !
 
+Or view directly on [oc-project14.vercel.app](https://oc-project14.vercel.app/)
+
 ## Author
 
 Boudra Tristan

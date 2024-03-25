@@ -1,5 +1,5 @@
 import { Select } from "hrnet_plugin_boudra_tristan";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAddEmployee } from "../../slices/createEmployeeSlice";
 import { Calendar } from "primereact/calendar";
@@ -35,11 +35,6 @@ export default function FormCreateEmployee() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [stateValue, setStateValue] = useState<string>("");
   const employees = useSelector((state: any) => state.createEmployee.employees);
-
-  useEffect(() => {
-    setStartDate(null);
-    setDateBirth(null);
-  }, [userSaved]);
 
   /**
    * A function that handles the change event for the start date input field.
@@ -108,7 +103,7 @@ export default function FormCreateEmployee() {
       const city = cityInput.value;
       const zipCode = zipCodeInput.value;
 
-      // Vérifier si l'employé existe déjà
+      // Check if employee already exists
       const employeeExists = employees.some((employee: any) => {
         return (
           employee.firstName === firstName &&
@@ -144,9 +139,9 @@ export default function FormCreateEmployee() {
         };
 
         dispatch(setAddEmployee(employeeData));
-        setUserSaved(true);
         setDateBirth(null);
         setStartDate(null);
+        setUserSaved(true);
         setSelectedDepartmentOption(null);
         setSelectedStateOption(null);
         showModalError("Success", "Employee created successfully !");
