@@ -11,6 +11,9 @@ import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 export default function Navbar(): JSX.Element {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  /**
+   * Function to toggle the menu open and closed.
+   */
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };

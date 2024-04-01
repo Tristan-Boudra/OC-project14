@@ -8,6 +8,12 @@ import { Dialog } from "primereact/dialog";
 import { states } from "../../data/states";
 import { department } from "../../data/department";
 
+/**
+ * A function that handles the change event for the start date input field.
+ *
+ * @param {ChangeEvent<HTMLInputElement>} e - the event object containing the input element
+ * @return {void}
+ */
 export default function FormCreateEmployee() {
   interface Option {
     name: string;
@@ -150,6 +156,13 @@ export default function FormCreateEmployee() {
     }
   };
 
+  /**
+   * Displays a modal with the given header and content.
+   *
+   * @param {string} header - The header of the modal.
+   * @param {string} content - The content of the modal.
+   * @return {void} This function does not return anything.
+   */
   const showModalError = (header: string, content: string) => {
     setDialogHeader(header);
     setDialogContent(content);
