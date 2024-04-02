@@ -4,7 +4,8 @@ import "./index.css";
 import "./flags.css";
 import App from "./App";
 import { Provider } from "react-redux";
-import store from "./store";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./store";
 import { PrimeReactProvider } from "primereact/api";
 import "primeflex/primeflex.css";
 import "primereact/resources/primereact.css";
@@ -18,7 +19,9 @@ root.render(
   <React.StrictMode>
     <PrimeReactProvider>
       <Provider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </PrimeReactProvider>
   </React.StrictMode>,

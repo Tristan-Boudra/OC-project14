@@ -1,9 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-/**
- * Interface defining the shape of employee data.
- */
-interface EmployeeData {
+// Interface defining the structure of an employee
+export interface Employee {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
@@ -15,33 +13,27 @@ interface EmployeeData {
   zipCode: string;
 }
 
-/**
- * Initial state for the createEmployee slice.
- */
-const initialState = {
-  employees: [] as EmployeeData[],
+// Interface defining the type of slice state
+export interface CreateEmployeeState {
+  employees: Employee[];
+}
+
+// Initial state of the slice
+const initialState: CreateEmployeeState = {
+  employees: [],
 };
 
-/**
- * Slice for managing the createEmployee state.
- */
+// Slice to manage the state of employees
 const createEmployeeSlice = createSlice({
   name: "createEmployee",
   initialState,
   reducers: {
-    /**
-     * Action to add an employee to the state.
-     * @param {object} state - The current state.
-     * @param {object} action - The action object containing the payload.
-     */
-    setAddEmployee(state, action) {
-      state.employees.push(action.payload as EmployeeData);
+    setAddEmployee(state, action: PayloadAction<Employee>) {
+      state.employees.push(action.payload);
     },
   },
 });
 
-/**
- * Exporting actions and reducer from the createEmployee slice.
- */
+// Exporting actions and reducer of the slice
 export const { setAddEmployee } = createEmployeeSlice.actions;
 export default createEmployeeSlice.reducer;

@@ -1,11 +1,36 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import createEmployeeReducer from "../slices/createEmployeeSlice";
 
-/**
- * Configures the Redux store with the createEmployee reducer.
- */
-export default configureStore({
-  reducer: {
-    createEmployee: createEmployeeReducer,
-  },
+// Configuration for persistence
+const persistConfig = {
+  key: "root",
+  storage,
+};
+
+// Type of global state
+export type RootReducer = {
+  createEmployee: typeof createEmployeeReducer;
+};
+
+// Root reducer with persistReducer
+const rootReducer = combineReducers<RootReducer>({
+  createEmployee: createEmployeeReducer,
 });
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Create store with the persistent reducer
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
+
+// Create a persistant store
+const persistor = persistStore(store);
+
+export { store, persistor };
