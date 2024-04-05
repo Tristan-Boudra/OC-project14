@@ -261,10 +261,10 @@ export default function FormCreateEmployee() {
       <form
         ref={formRef}
         onSubmit={handleSave}
-        className="md:flex md:flex-col border p-5 rounded-lg mt-5"
+        className="md:flex md:flex-col md:border p-5 md:rounded-lg mt-5"
       >
         <h1 className="text-primary text-2xl">Form Create Employee</h1>
-        <div className="md:flex md:flex-row md:justify-around md:w-full md:mt-10">
+        <div className="md:flex md:flex-row md:justify-around md:w-full mt-10">
           <div className="flex flex-col gap-5">
             <div className="flex flex-col">
               <label className="text-left text-primary ">First Name</label>
